@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { FaCheckCircle, FaEllipsisV, FaPlusCircle, FaPlus, FaChevronDown, FaBook } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
-import { assignments } from "../../Database";
+import db from "../../Database";
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css'
 
 function Assignments() {
   const { courseId } = useParams();
-  const assignmentList = assignments.filter(
+  const assignmentList = db.assignments.filter(
     (assignment) => assignment.course === courseId);
   
   const [value, setValue] = useState('');

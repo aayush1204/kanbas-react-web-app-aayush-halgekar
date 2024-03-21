@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { assignments, enrollments, grades, users } from "../../Database";
+// import { assignments, enrollments, grades, users } from "../../Database";
+import db from "../../Database";
 import { useParams } from "react-router-dom";
 import { FaFilter,FaFileImport, FaFileExport, FaCog } from 'react-icons/fa';
 import { FaSignInAlt, FaSignOutAlt, FaAngleDown } from 'react-icons/fa';
@@ -18,16 +19,16 @@ function Grades() {
     setAssignmentSearch(tempAssignmentSearch);
   };
 
-  const filteredAssignments = assignments.filter(
+  const filteredAssignments = db.assignments.filter(
     (assignment) =>
       assignment.course === courseId &&
       assignment.title.toLowerCase().includes(assignmentSearch.toLowerCase())
   );
 
-  const filteredEnrollments = enrollments.filter(
+  const filteredEnrollments = db.enrollments.filter(
     (enrollment) =>
       enrollment.course === courseId &&
-      users.find((user) => user._id === enrollment.user)?.firstName
+      db.users.find((user) => user._id === enrollment.user)?.firstName
         .toLowerCase()
         .includes(studentSearch.toLowerCase())
   );
@@ -119,14 +120,14 @@ function Grades() {
           </thead>
           <tbody>
             {filteredEnrollments.map((enrollment, index) => {
-              const user = users.find((user) => user._id === enrollment.user);
+              const user = db.users.find((user) => user._id === enrollment.user);
               return (
                 <tr key={enrollment._id} className={index % 2 === 0 ? "even" : "odd"}>
                   <td>
                     {user?.firstName} {user?.lastName}
                   </td>
                   {filteredAssignments.map((assignment) => {
-                    const grade = grades.find(
+                    const grade = db.grades.find(
                       (grade) =>
                         grade.student === enrollment.user &&
                         grade.assignment === assignment._id
